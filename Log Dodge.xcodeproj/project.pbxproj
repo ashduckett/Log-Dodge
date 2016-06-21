@@ -14,12 +14,12 @@
 		5E33ED411D02074700386B96 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E33ED3F1D02074700386B96 /* Main.storyboard */; };
 		5E33ED431D02074700386B96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E33ED421D02074700386B96 /* Assets.xcassets */; };
 		5E33ED461D02074700386B96 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E33ED441D02074700386B96 /* LaunchScreen.storyboard */; };
-		5E33ED501D020AEB00386B96 /* ocean.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E33ED4F1D020AEB00386B96 /* ocean.png */; };
-		5E47A1EB1D10A07B00D7318C /* logleft.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E47A1EA1D10A07B00D7318C /* logleft.png */; };
-		5E47A1ED1D10A54C00D7318C /* logright.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E47A1EC1D10A54C00D7318C /* logright.png */; };
-		5E5DE4B91D167EAB00ECA8B8 /* boat.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5DE4B81D167EAB00ECA8B8 /* boat.png */; };
 		5E5DE4BC1D16EA2A00ECA8B8 /* WaterTrail.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5E5DE4BA1D16EA2A00ECA8B8 /* WaterTrail.sks */; };
 		5E5DE4BD1D16EA2A00ECA8B8 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E5DE4BB1D16EA2A00ECA8B8 /* spark.png */; };
+		5EDEEAB41D19DF3000690EC5 /* boat.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EDEEAB31D19DF3000690EC5 /* boat.png */; };
+		5EDEEAB61D19E07500690EC5 /* logright.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EDEEAB51D19E07500690EC5 /* logright.png */; };
+		5EDEEAB81D19E08700690EC5 /* logleft.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EDEEAB71D19E08700690EC5 /* logleft.png */; };
+		5EDEEABA1D19E09C00690EC5 /* ocean.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EDEEAB91D19E09C00690EC5 /* ocean.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,12 +32,12 @@
 		5E33ED421D02074700386B96 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5E33ED451D02074700386B96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5E33ED471D02074700386B96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5E33ED4F1D020AEB00386B96 /* ocean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ocean.png; path = ../../ocean.png; sourceTree = "<group>"; };
-		5E47A1EA1D10A07B00D7318C /* logleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logleft.png; path = ../../logleft.png; sourceTree = "<group>"; };
-		5E47A1EC1D10A54C00D7318C /* logright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logright.png; path = ../../logright.png; sourceTree = "<group>"; };
-		5E5DE4B81D167EAB00ECA8B8 /* boat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = boat.png; path = ../../boat.png; sourceTree = "<group>"; };
 		5E5DE4BA1D16EA2A00ECA8B8 /* WaterTrail.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WaterTrail.sks; sourceTree = "<group>"; };
 		5E5DE4BB1D16EA2A00ECA8B8 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
+		5EDEEAB31D19DF3000690EC5 /* boat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = boat.png; sourceTree = "<group>"; };
+		5EDEEAB51D19E07500690EC5 /* logright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logright.png; sourceTree = "<group>"; };
+		5EDEEAB71D19E08700690EC5 /* logleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logleft.png; sourceTree = "<group>"; };
+		5EDEEAB91D19E09C00690EC5 /* ocean.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ocean.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,10 +74,10 @@
 			children = (
 				5E33ED371D02074600386B96 /* AppDelegate.swift */,
 				5E33ED391D02074600386B96 /* GameScene.sks */,
-				5E33ED4F1D020AEB00386B96 /* ocean.png */,
-				5E5DE4B81D167EAB00ECA8B8 /* boat.png */,
-				5E47A1EC1D10A54C00D7318C /* logright.png */,
-				5E47A1EA1D10A07B00D7318C /* logleft.png */,
+				5EDEEAB91D19E09C00690EC5 /* ocean.png */,
+				5EDEEAB31D19DF3000690EC5 /* boat.png */,
+				5EDEEAB51D19E07500690EC5 /* logright.png */,
+				5EDEEAB71D19E08700690EC5 /* logleft.png */,
 				5E33ED3B1D02074600386B96 /* GameScene.swift */,
 				5E33ED3D1D02074600386B96 /* GameViewController.swift */,
 				5E33ED3F1D02074700386B96 /* Main.storyboard */,
@@ -148,15 +148,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E33ED3A1D02074600386B96 /* GameScene.sks in Resources */,
-				5E5DE4B91D167EAB00ECA8B8 /* boat.png in Resources */,
 				5E5DE4BC1D16EA2A00ECA8B8 /* WaterTrail.sks in Resources */,
+				5EDEEAB61D19E07500690EC5 /* logright.png in Resources */,
 				5E33ED461D02074700386B96 /* LaunchScreen.storyboard in Resources */,
-				5E33ED501D020AEB00386B96 /* ocean.png in Resources */,
+				5EDEEABA1D19E09C00690EC5 /* ocean.png in Resources */,
 				5E5DE4BD1D16EA2A00ECA8B8 /* spark.png in Resources */,
-				5E47A1EB1D10A07B00D7318C /* logleft.png in Resources */,
 				5E33ED431D02074700386B96 /* Assets.xcassets in Resources */,
+				5EDEEAB81D19E08700690EC5 /* logleft.png in Resources */,
 				5E33ED411D02074700386B96 /* Main.storyboard in Resources */,
-				5E47A1ED1D10A54C00D7318C /* logright.png in Resources */,
+				5EDEEAB41D19DF3000690EC5 /* boat.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
