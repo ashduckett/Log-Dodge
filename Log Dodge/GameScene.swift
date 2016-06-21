@@ -8,35 +8,299 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
-    override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
-        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-        myLabel.text = "Hello, World!"
-        myLabel.fontSize = 45
-        myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame))
+class GameScene: SKScene, SKPhysicsContactDelegate {
+    var water = SKSpriteNode()
+    var boat = SKSpriteNode()
+    var waterEffect = SKEmitterNode()
+    var gameOver = false
+    
+    var gameOverLabel = SKLabelNode()
+    var score = 0
+    var scoreLabel = SKLabelNode()
+    
+    enum ColliderType: UInt32 {
+        case Boat = 1
+        case Object = 2
+        case Gap = 4
+    }
+    
+    
+    func makeAndAddBackground() {
+        let waterTexture = SKTexture(imageNamed: "ocean.png")
+        water = SKSpriteNode(texture: waterTexture)
         
-        self.addChild(myLabel)
+        water.size = self.frame.size
+        water.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame))
+        self.addChild(water)
+    }
+    
+    func makeAndAddBoat() {
+        let boatTexture = SKTexture(imageNamed: "boat.png")
+        
+        boat = SKSpriteNode(texture: boatTexture)
+        boat.position = CGPoint(x: CGRectGetMidX(self.frame), y: 30 + boat.size.height / 2)
+        
+        boat.physicsBody = SKPhysicsBody(rectangleOfSize: boat.size)
+        boat.physicsBody?.dynamic = true
+        boat.physicsBody!.affectedByGravity = false
+        boat.physicsBody!.allowsRotation = false
+        
+        boat.physicsBody!.categoryBitMask = ColliderType.Boat.rawValue
+        boat.physicsBody!.contactTestBitMask = ColliderType.Object.rawValue
+        boat.physicsBody!.collisionBitMask = 0
+        
+        self.addChild(boat)
+        
+        
+
+    }
+    
+    func makeAndAddScoreLabel() {
+        scoreLabel.fontName = "Helvetica"
+        scoreLabel.fontSize = 60
+        scoreLabel.text = "0"
+        scoreLabel.position = CGPoint(x: CGRectGetMidX(self.frame), y: self.frame.height - 70)
+        self.addChild(scoreLabel)
+
+    }
+    
+    func makeAndAddWaterParticles() {
+        let waterEffectPath = NSBundle.mainBundle().pathForResource("WaterTrail", ofType: "sks")
+        
+        waterEffect = NSKeyedUnarchiver.unarchiveObjectWithFile(waterEffectPath!) as! SKEmitterNode
+        waterEffect.position = CGPointMake(CGRectGetMidX(self.frame), boat.position.y - boat.size.height / 2)
+        waterEffect.name = "waterTrail"
+        waterEffect.targetNode = self.scene
+        self.addChild(waterEffect)
+
+    }
+    
+    func startLogsRolling() {
+        
+        let act = SKAction.sequence([SKAction.runBlock({
+            self.runLog()
+        }), SKAction.waitForDuration(3)])
+        
+        
+        runAction(SKAction.repeatActionForever(act))
+        
+    }
+    
+    override func didMoveToView(view: SKView) {
+        
+        self.physicsWorld.contactDelegate = self
+        
+        
+        makeAndAddBackground()
+        makeAndAddBoat()
+        makeAndAddWaterParticles()
+        makeAndAddScoreLabel()
+        startLogsRolling()
+    
+    }
+    
+    func didBeginContact(contact: SKPhysicsContact) {
+        
+        if contact.bodyA.categoryBitMask == ColliderType.Gap.rawValue || contact.bodyB.categoryBitMask == ColliderType.Gap.rawValue {
+        
+            score++
+            scoreLabel.text = String(score)
+ 
+            
+            
+        } else {
+        
+            self.speed = 0
+            gameOver = true
+            waterEffect.paused = true
+            
+            
+            gameOverLabel.fontName = "Helvetica"
+            gameOverLabel.fontSize = 30
+            gameOverLabel.text = "Game Over! Tap to play again"
+            gameOverLabel.position = CGPointMake(CGRectGetMaxX(self.frame), CGRectGetMidY(self.frame))
+            
+            self.addChild(gameOverLabel)
+        }
+    }
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        boat.removeActionForKey("moveToClick")
+        waterEffect.removeActionForKey("moveToClick")
+
+    }
+    
+    func runLog() {
+        print("runLog()")
+        var leftLog = SKSpriteNode()
+        var rightLog = SKSpriteNode()
+        
+        let gap = SKSpriteNode()
+      
+        // gap.color = UIColor.redColor()
+        gap.size.width = 30
+        gap.size.height = 30
+        
+        let leftLogTexture = SKTexture(imageNamed: "logleft.png")
+        let rightLogTexture = SKTexture(imageNamed: "logright.png")
+        
+        
+        
+        
+        
+        
+        
+        leftLog = SKSpriteNode(texture: leftLogTexture)
+        rightLog = SKSpriteNode(texture: rightLogTexture)
+        
+        leftLog.physicsBody = SKPhysicsBody(rectangleOfSize: leftLog.size)
+        leftLog.physicsBody!.dynamic = false
+        leftLog.physicsBody!.categoryBitMask = ColliderType.Object.rawValue
+        leftLog.physicsBody!.contactTestBitMask = ColliderType.Boat.rawValue
+        leftLog.physicsBody!.collisionBitMask = 0
+        
+        
+        rightLog.physicsBody = SKPhysicsBody(rectangleOfSize: leftLog.size)
+        rightLog.physicsBody!.dynamic = false
+        rightLog.physicsBody!.categoryBitMask = ColliderType.Object.rawValue
+        rightLog.physicsBody!.contactTestBitMask = ColliderType.Boat.rawValue
+        rightLog.physicsBody!.collisionBitMask = 0
+      
+        
+        self.addChild(leftLog)
+        self.addChild(rightLog)
+        self.addChild(gap)
+        
+        leftLog.position = CGPoint(x: CGRectGetMidX(self.frame) - leftLog.size.width / 2, y: self.frame.height + leftLog.size.height / 2)
+        rightLog.position = CGPoint(x: CGRectGetMidX(self.frame) + rightLog.size.width / 2, y: self.frame.height + rightLog.size.height / 2)
+        
+        let gapWidth = CGFloat(80.0)
+        
+        
+        
+        
+        let minX = gapWidth / 2;
+        let maxX = UInt32(self.frame.width - gapWidth / 2)
+        
+        let rand = CGFloat(arc4random_uniform(maxX)) + minX
+        let gapPosition = rand
+
+        if(gapPosition < gapWidth / 2 || gapPosition > self.frame.width - gapWidth / 2) {
+            print("Too far off one of the edges")
+        }
+        
+        
+        
+        
+        
+        leftLog.position.x = gapPosition - leftLog.size.width / 2 - gapWidth / 2
+        rightLog.position.x = gapPosition + rightLog.size.width / 2 + gapWidth / 2
+        gap.position.x = gapPosition
+        gap.position.y = leftLog.position.y
+        gap.size.width = gapWidth
+        // We need an end location
+        let locationLogLeft = CGPointMake(leftLog.position.x, CGRectGetMidY(self.frame) - self.frame.height / 2 - leftLog.size.height / 2)
+        let locationLogRight = CGPointMake(rightLog.position.x, CGRectGetMidY(self.frame) - self.frame.height / 2 - rightLog.size.height / 2)
+        
+        let moveLeftLogToBottom = SKAction.moveTo(locationLogLeft, duration: 5)
+        let moveRightLogToBottom = SKAction.moveTo(locationLogRight, duration: 5)
+        let moveGapToBottom = SKAction.moveToY(locationLogRight.y, duration: 5)
+        
+        
+        
+        
+        
+        gap.physicsBody = SKPhysicsBody(rectangleOfSize: gap.size)
+        gap.physicsBody!.dynamic = false
+        
+        
+        gap.physicsBody!.categoryBitMask = ColliderType.Gap.rawValue
+        gap.physicsBody!.contactTestBitMask = ColliderType.Boat.rawValue
+        gap.physicsBody!.collisionBitMask = 0
+        
+        
+        leftLog.runAction(moveLeftLogToBottom, completion: {
+            leftLog.removeFromParent()
+        })
+        rightLog.runAction(moveRightLogToBottom, completion: {
+            rightLog.removeFromParent()
+            
+        })
+        
+        gap.runAction(moveGapToBottom, completion: {
+            gap.removeFromParent()
+        })
+        
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-       /* Called when a touch begins */
+        if !gameOver {
+            let touch = touches.first
+            var location = touch?.locationInNode(self)
         
-        for touch in touches {
-            let location = touch.locationInNode(self)
+        
+            let boatPos = self.boat.position
+        
+            location!.y = boatPos.y
+        
+        
+        
+            let leftSideOfWater = CGRectGetMidX(self.frame) - water.size.width / 2
+        
+        
+            if location!.x < (0.0 + boat.size.width / 2) {
+                print("position to far to the left")
+                location!.x = leftSideOfWater + boat.size.width / 2
+            }
+        
+            if location!.x > (self.frame.width - boat.size.width / 2) {
+                location!.x = self.frame.width - boat.size.width / 2
+            }
+        
+        
+        
+        
+            let one = Float(location!.x - boatPos.x)
+            let two = Float(location!.y - boatPos.y)
+        
+            let distance = Double(sqrtf((one) * (one) + (two) * (two)))
+        
+            let moveToClick = SKAction.moveTo(location!, duration: distance / 500)
+        
+            var particlePos = location!
+        
+          //  particlePos.y -= boat.size.height
+        
+            let moveParticles = SKAction.moveToX(particlePos.x, duration: distance / 500)
+        
+     
+        
+            boat.runAction(moveToClick, withKey: "moveToClick")
+            waterEffect.runAction(moveParticles, withKey: "moveToClick")
+     
+        
+        } else {
+            gameOver = false
+            score = 0
+            scoreLabel.text = "0"
+    
             
-            let sprite = SKSpriteNode(imageNamed:"Spaceship")
             
-            sprite.xScale = 0.5
-            sprite.yScale = 0.5
-            sprite.position = location
+           // boat.position = CGPoint(x: CGRectGetMidX(self.frame), y: 30 + boat.size.height / 2)
             
-            let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
+            self.removeAllChildren()
             
-            sprite.runAction(SKAction.repeatActionForever(action))
             
-            self.addChild(sprite)
+            makeAndAddBackground()
+            makeAndAddBoat()
+            makeAndAddWaterParticles()
+            makeAndAddScoreLabel()
+          //  startLogsRolling()
+            
+            self.speed = 1
+            
         }
+        
     }
    
     override func update(currentTime: CFTimeInterval) {
