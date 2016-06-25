@@ -24,6 +24,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         case Gap = 4
     }
     
+    func generateRandomNumberInRange(min: Int, max: Int) -> Int {
+        
+        let minimum = UInt32(min)
+        let maximum = UInt32(max)
+        
+        let number = arc4random_uniform(maximum - minimum + 1) + minimum
+        return Int(number)
+    }
+    
     
     func makeAndAddBackground() {
         let waterTexture = SKTexture(imageNamed: "ocean.png")
@@ -170,30 +179,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(rightLog)
         self.addChild(gap)
         
-        leftLog.position = CGPoint(x: CGRectGetMidX(self.frame) - leftLog.size.width / 2, y: self.frame.height + leftLog.size.height / 2)
-        rightLog.position = CGPoint(x: CGRectGetMidX(self.frame) + rightLog.size.width / 2, y: self.frame.height + rightLog.size.height / 2)
-        
         let gapWidth = CGFloat(80.0)
         
-        
-        
-        
-        let minX = gapWidth / 2;
-        let maxX = UInt32(self.frame.width - gapWidth / 2)
-        
-        let rand = CGFloat(arc4random_uniform(maxX)) + minX
-        let gapPosition = rand
+        let minX = Int(gapWidth / 2)
+        let maxX = Int(self.frame.width - gapWidth / 2)                                              // Make this a CGFloat
+    
+        let gapPosition = CGFloat(self.generateRandomNumberInRange(minX, max: maxX))
 
-        if(gapPosition < gapWidth / 2 || gapPosition > self.frame.width - gapWidth / 2) {
-            print("Too far off one of the edges")
-        }
+        // Set the left and right log positions to meet in the center of the screen.
+        leftLog.position = CGPoint(x: gapPosition - leftLog.size.width / 2 - gapWidth / 2, y: self.frame.height + leftLog.size.height / 2)
+        rightLog.position = CGPoint(x: gapPosition + rightLog.size.width / 2 + gapWidth / 2, y: self.frame.height + rightLog.size.height / 2)
         
         
         
         
-        
-        leftLog.position.x = gapPosition - leftLog.size.width / 2 - gapWidth / 2
-        rightLog.position.x = gapPosition + rightLog.size.width / 2 + gapWidth / 2
         
         
         
@@ -209,20 +208,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         
-        let animateToBottomOfScreen = SKAction.moveToY(endingYPosition, duration: 5)
+        
         
         
         
         gap.physicsBody = SKPhysicsBody(rectangleOfSize: gap.size)
         gap.physicsBody!.dynamic = false
-        
-        
         gap.physicsBody!.categoryBitMask = ColliderType.Gap.rawValue
         gap.physicsBody!.contactTestBitMask = ColliderType.Boat.rawValue
         gap.physicsBody!.collisionBitMask = 0
         
         
         // Is there a way to run the same action on multiple sprites in a single call?
+        
+        
+        
+        let animateToBottomOfScreen = SKAction.moveToY(endingYPosition, duration: 5)
         
         // Move the left log to the bottom of the screen and remove it on completion
         leftLog.runAction(animateToBottomOfScreen, completion: {
