@@ -207,12 +207,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let endingYPosition = 0 - leftLog.size.height / 2
         
         
-        // We have set the locations of all three sprites above this.
-        let moveLeftLogToBottom = SKAction.moveToY(CGFloat(endingYPosition), duration: 5)
-        let moveRightLogToBottom = SKAction.moveToY(endingYPosition, duration: 5)
-        let moveGapToBottom = SKAction.moveToY(endingYPosition, duration: 5)
         
         
+        let animateToBottomOfScreen = SKAction.moveToY(endingYPosition, duration: 5)
         
         
         
@@ -228,18 +225,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Is there a way to run the same action on multiple sprites in a single call?
         
         // Move the left log to the bottom of the screen and remove it on completion
-        leftLog.runAction(moveLeftLogToBottom, completion: {
+        leftLog.runAction(animateToBottomOfScreen, completion: {
             leftLog.removeFromParent()
         })
         
         // Move the right log to the bottom of the screen and remove it on completion
-        rightLog.runAction(moveRightLogToBottom, completion: {
+        rightLog.runAction(animateToBottomOfScreen, completion: {
             rightLog.removeFromParent()
             
         })
         
         // Move the gap to the bottom of the screen and remove it on completion
-        gap.runAction(moveGapToBottom, completion: {
+        gap.runAction(animateToBottomOfScreen, completion: {
             gap.removeFromParent()
         })
         
