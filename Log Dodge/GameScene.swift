@@ -131,13 +131,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func runLog() {
-        print("runLog()")
+        
         var leftLog = SKSpriteNode()
         var rightLog = SKSpriteNode()
         
         let gap = SKSpriteNode()
-      
-        // gap.color = UIColor.redColor()
+        
         gap.size.width = 30
         gap.size.height = 30
         
@@ -195,16 +194,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         leftLog.position.x = gapPosition - leftLog.size.width / 2 - gapWidth / 2
         rightLog.position.x = gapPosition + rightLog.size.width / 2 + gapWidth / 2
+        
+        
+        
         gap.position.x = gapPosition
         gap.position.y = leftLog.position.y
         gap.size.width = gapWidth
-        // We need an end location
-        let locationLogLeft = CGPointMake(leftLog.position.x, CGRectGetMidY(self.frame) - self.frame.height / 2 - leftLog.size.height / 2)
-        let locationLogRight = CGPointMake(rightLog.position.x, CGRectGetMidY(self.frame) - self.frame.height / 2 - rightLog.size.height / 2)
         
-        let moveLeftLogToBottom = SKAction.moveTo(locationLogLeft, duration: 5)
-        let moveRightLogToBottom = SKAction.moveTo(locationLogRight, duration: 5)
-        let moveGapToBottom = SKAction.moveToY(locationLogRight.y, duration: 5)
+        
+        
+        
+        let endingYPosition = 0 - leftLog.size.height / 2
+        
+        
+        // We have set the locations of all three sprites above this.
+        let moveLeftLogToBottom = SKAction.moveToY(CGFloat(endingYPosition), duration: 5)
+        let moveRightLogToBottom = SKAction.moveToY(endingYPosition, duration: 5)
+        let moveGapToBottom = SKAction.moveToY(endingYPosition, duration: 5)
         
         
         
@@ -219,14 +225,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gap.physicsBody!.collisionBitMask = 0
         
         
+        // Is there a way to run the same action on multiple sprites in a single call?
+        
+        // Move the left log to the bottom of the screen and remove it on completion
         leftLog.runAction(moveLeftLogToBottom, completion: {
             leftLog.removeFromParent()
         })
+        
+        // Move the right log to the bottom of the screen and remove it on completion
         rightLog.runAction(moveRightLogToBottom, completion: {
             rightLog.removeFromParent()
             
         })
         
+        // Move the gap to the bottom of the screen and remove it on completion
         gap.runAction(moveGapToBottom, completion: {
             gap.removeFromParent()
         })
