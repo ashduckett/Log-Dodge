@@ -35,12 +35,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     func makeAndAddBackground() {
-        let waterTexture = SKTexture(imageNamed: "ocean.png")
-        water = SKSpriteNode(texture: waterTexture)
+       // let waterTexture = SKTexture(imageNamed: "ocean.png")
+       // water = SKSpriteNode(texture: waterTexture)
         
-        water.size = self.frame.size
-        water.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame))
-        self.addChild(water)
+        //water.size = self.frame.size
+        //water.position = CGPoint(x: CGRectGetMidX(self.frame), y: CGRectGetMidY(self.frame))
+        //self.addChild(water)
+    
+        self.backgroundColor = UIColor.blueColor()
     }
     
     func makeAndAddBoat() {
@@ -58,6 +60,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         boat.physicsBody!.contactTestBitMask = ColliderType.Object.rawValue
         boat.physicsBody!.collisionBitMask = 0
         
+        
+        
         self.addChild(boat)
         
         
@@ -65,7 +69,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func makeAndAddScoreLabel() {
-        scoreLabel.fontName = "Helvetica"
+        scoreLabel.fontName = "8BIT WONDER"
         scoreLabel.fontSize = 60
         scoreLabel.text = "0"
         scoreLabel.position = CGPoint(x: CGRectGetMidX(self.frame), y: self.frame.height - 70)
@@ -112,22 +116,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if contact.bodyA.categoryBitMask == ColliderType.Gap.rawValue || contact.bodyB.categoryBitMask == ColliderType.Gap.rawValue {
         
-            score++
+            score += 1
             scoreLabel.text = String(score)
  
             
             
         } else {
-        
+            
             self.speed = 0
             gameOver = true
             waterEffect.paused = true
             
             
-            gameOverLabel.fontName = "Helvetica"
-            gameOverLabel.fontSize = 30
-            gameOverLabel.text = "Game Over! Tap to play again"
-            gameOverLabel.position = CGPointMake(CGRectGetMaxX(self.frame), CGRectGetMidY(self.frame))
+            gameOverLabel.fontName = "8BIT WONDER"
+            gameOverLabel.fontSize = 14
+            gameOverLabel.text = "Game Over!\n Tap to play again"
+            gameOverLabel.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
             
             self.addChild(gameOverLabel)
         }
@@ -141,16 +145,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func runLog() {
         
+        let fontFamilies = UIFont.familyNames()
+        
+        for fontFamily in fontFamilies {
+            print(fontFamily)
+        }
+        
+        
+        
+        
+        
+        
+        
         var leftLog = SKSpriteNode()
         var rightLog = SKSpriteNode()
         
+        
+        
         let gap = SKSpriteNode()
         
-        gap.size.width = 30
-        gap.size.height = 30
-        
-        let leftLogTexture = SKTexture(imageNamed: "logleft.png")
-        let rightLogTexture = SKTexture(imageNamed: "logright.png")
+        //gap.size.width = 30
+        //gap.size.height = 30
+        //gap.color = UIColor.redColor()
+        let leftLogTexture = SKTexture(imageNamed: "leftLogTwo.png")
+        let rightLogTexture = SKTexture(imageNamed: "leftLogTwo.png")
         
         
         
@@ -161,18 +179,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         leftLog = SKSpriteNode(texture: leftLogTexture)
         rightLog = SKSpriteNode(texture: rightLogTexture)
         
-        leftLog.physicsBody = SKPhysicsBody(rectangleOfSize: leftLog.size)
-        leftLog.physicsBody!.dynamic = false
-        leftLog.physicsBody!.categoryBitMask = ColliderType.Object.rawValue
-        leftLog.physicsBody!.contactTestBitMask = ColliderType.Boat.rawValue
-        leftLog.physicsBody!.collisionBitMask = 0
-        
-        
-        rightLog.physicsBody = SKPhysicsBody(rectangleOfSize: leftLog.size)
-        rightLog.physicsBody!.dynamic = false
-        rightLog.physicsBody!.categoryBitMask = ColliderType.Object.rawValue
-        rightLog.physicsBody!.contactTestBitMask = ColliderType.Boat.rawValue
-        rightLog.physicsBody!.collisionBitMask = 0
+  
       
         
         self.addChild(leftLog)
@@ -193,12 +200,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         
+        gap.position = CGPointMake(gapPosition, leftLog.position.y)
+          gap.size = CGSizeMake(gapWidth, leftLog.size.height)
         
-        
-        
-        gap.position.x = gapPosition
-        gap.position.y = leftLog.position.y
-        gap.size.width = gapWidth
+
         
         
         
@@ -207,13 +212,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         
+        leftLog.physicsBody = SKPhysicsBody(rectangleOfSize: leftLog.size)
+        leftLog.physicsBody!.dynamic = false
+        leftLog.physicsBody!.categoryBitMask = ColliderType.Object.rawValue
+        leftLog.physicsBody!.contactTestBitMask = ColliderType.Boat.rawValue
+        leftLog.physicsBody!.collisionBitMask = 0
         
+        
+        
+        print("size of left log \(leftLog.size)")
+        rightLog.physicsBody = SKPhysicsBody(rectangleOfSize: rightLog.size)
+        rightLog.physicsBody!.dynamic = false
+        rightLog.physicsBody!.categoryBitMask = ColliderType.Object.rawValue
+        rightLog.physicsBody!.contactTestBitMask = ColliderType.Boat.rawValue
+        rightLog.physicsBody!.collisionBitMask = 0
         
         
         
         
         gap.physicsBody = SKPhysicsBody(rectangleOfSize: gap.size)
         gap.physicsBody!.dynamic = false
+        
         gap.physicsBody!.categoryBitMask = ColliderType.Gap.rawValue
         gap.physicsBody!.contactTestBitMask = ColliderType.Boat.rawValue
         gap.physicsBody!.collisionBitMask = 0
@@ -277,7 +296,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
             let moveToClick = SKAction.moveTo(location!, duration: distance / 500)
         
-            var particlePos = location!
+            let particlePos = location!
+            
         
           //  particlePos.y -= boat.size.height
         
